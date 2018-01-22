@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    	<style>
+    		*{ margin:0; padding: 0; }
+    		ul,li,ol{ list-style: none; }
+    		img{ display: block; }
+    		.box{
+    			width:350px;
+    			height: 350px;
+    			border:1px solid #ccc;
+    			position: relative;
+    			left:400px;
+    			top:100px;
+    		}
+    		.small{
+    			width:350px;
+    			height: 350px;
+    			position: relative;
+    		}
+    		.small li{
+    			position: absolute;
+    			left:0;
+    			top:0;
+    		}
+    		.mask{
+    			width: 175px;
+    			height: 175px;
+    			background: pink;
+    			opacity: 0.5;
+    			position: absolute;
+    			left: 0;
+    			top:0;
+    			display: none;
+    		}
+    		.big{
+    			width:400px;
+    			height: 400px;
+    			border:1px solid #ccf;
+    			overflow: hidden;
+    			position: absolute;
+    			left:360px;
+    			top:0;
+    		}
+    		.big li{
+    			position: absolute;
+    			left: 0;
+    			top:0;
+    		}
+    		.bottom{
+    			width:350px;
+    			position: relative;
+    		}
+    		.bottom li{
+    			width:80px;
+    			float: left;
+    		}
+    	</style>
+    </style>
+    <script src="jquery-1.11.1.min.js"></script>
+</head>
+<body>
+		<div id="box" class="box">
+			<ul class="small" id="small">
+				<li><img src="images/1m.jpg" alt="" /></li>
+				<li><img src="images/2m.jpg" alt="" /></li>
+				<li><img src="images/3m.jpg" alt="" /></li>
+				<li><img src="images/4m.jpg" alt="" /></li>
+				<div id="mask" class="mask" ></div>
+			</ul>
+			<ul id="big" class="big">
+				<li><img src="images/1b.jpg" alt="" /></li>
+				<li><img src="images/2b.jpg" alt="" /></li>
+				<li><img src="images/3b.jpg" alt="" /></li>
+				<li><img src="images/4b.jpg" alt="" /></li>
+			</ul>
+			<ul id="bottom" class="bottom">
+				<li><img src="images/1s.jpg" alt="" /></li>
+				<li><img src="images/2s.jpg" alt="" /></li>
+				<li><img src="images/3s.jpg" alt="" /></li>
+				<li><img src="images/4s.jpg" alt="" /></li>
+			</ul>
+		</div>
+	<!-- 用的东西必须都加定位 -->
+</body>
+</html>
+<script type="text/javascript">
+ 		$(".small").mouseenter(function(){
+ 			$("#mask").show();//css( "display","block" );
+ 			$("#big").show();//css( "display","block" );
+ 		}).mouseleave(function(){
+ 			$("#mask").hide();//css( "display","none" );
+ 			$("#big").hide();//css( "display","none" );
+ 		})
+ 		
+ 		$("#bottom li").mouseenter(function(){
+ 			var index=$(this).index();
+ 			$("#small li").eq(index).show().siblings().hide();
+ 			$("#big li").eq(index).show().siblings().hide();
+ 		})
+ 		
+ 		$("#small").mousemove(function(e){
+ 			var e = e || event;
+ 			var x=e.pageX - $("#box").offset().left - $("#mask").outerWidth()/2;
+ 			var y=e.pageY - $("#box").offset().top - $("#mask").outerHeight()/2;
+ 			var maxl =$("#box").outerWidth() - $("#mask").outerWidth();
+ 			var maxt =$("#box").outerHeight() - $("#mask").outerHeight();
+ 			x=Math.min( maxl, Math.max( 0, x ) );
+ 			y=Math.min( maxt, Math.max( 0, y ) );
+ 			//  大图left / mask.left = 大图宽度 / 小图宽度 = 大图可视区宽度 /mask的宽度
+ 			$(".big li").css( {
+ 				left: -x*800/350,
+ 				top: -y*800/350,
+ 			} )
+ 			$("#mask").css( { "left":x , "top" : y } )
+ 			return false;
+ 		})
+</script>
